@@ -108,6 +108,54 @@ def SCAN_sobe_help(fila_espera, cabeca, atendidos, cilindros):
 	# print('fila', fila_espera)
 
 
+# Algoritmo SCAN Desce
+def SCAN_desce(fila):
+	fila_espera = fila[:]
+	cilindros = 0
+	cabeca = fila_espera.pop(0)
+	atendidos = [int(cabeca)]
+
+	for i in range(len(fila_espera)):
+		fila_espera[i] = int(fila_espera[i])
+
+	SCAN_desce_help(fila_espera, cabeca, atendidos, cilindros)
+
+def SCAN_desce_help(fila_espera, cabeca, atendidos, cilindros):
+	diff = []
+	menores = []
+	maiores = []
+
+	for f in fila_espera:
+		if f < int(cabeca):
+			menores.append(f)
+
+		elif f > int(cabeca):
+			maiores.append(f)
+	
+	while len(maiores) > 0:
+		m = min(maiores)
+		atendidos.append(m)
+		fila_espera.pop(fila_espera.index(m))
+		maiores.pop(maiores.index(m))
+
+	while len(menores) > 0:
+		m = max(menores)
+		atendidos.append(m)
+		fila_espera.pop(fila_espera.index(m))
+		menores.pop(menores.index(m))
+
+	for i in range(len(atendidos) - 1):
+		c = abs(atendidos[i + 1] - atendidos[i])
+		cilindros += c
+
+	for i in range(len(atendidos)):
+		atendidos[i] = str(atendidos[i])
+
+	atendidos = ', '.join(atendidos)
+	print('SCAN desce')
+	print('     Ordem: ', atendidos)
+	print('     Cilindros: ', cilindros, '\n')
+
 
 def main():
 	try:
@@ -131,6 +179,7 @@ def main():
 	FCFS(fila)
 	SSTF(fila)
 	SCAN_sobe(fila)
+	SCAN_desce(fila)
 
 if __name__ == '__main__':
 		main()
