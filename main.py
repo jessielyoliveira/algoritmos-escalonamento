@@ -13,12 +13,7 @@ def FCFS(fila):
 	for f in fila_espera:
 		atendidos.append(f)
 	atendidos = ', '.join(atendidos)
-
-	print('\nFCFS')
-	print('     Ordem: ', atendidos)
-	print('     Cilindros: ', cilindros, '\n')
-
-
+	imprimir('\nFCFS', atendidos, cilindros)
 
 # Algoritmo SSTF
 def SSTF(fila):
@@ -32,10 +27,8 @@ def SSTF_help(fila_espera, cabeca, atendidos, cilindros):
 	diff = []
 	if len(fila_espera) == 0:
 		atendidos = ', '.join(atendidos)
+		imprimir('SSTF', atendidos, cilindros)
 
-		print('SSTF')
-		print('     Ordem: ', atendidos)
-		print('     Cilindros: ', cilindros, '\n')
 		return
 	else:
 		menor = min(menor_diferenca(fila_espera, cabeca, diff))
@@ -48,26 +41,22 @@ def SSTF_help(fila_espera, cabeca, atendidos, cilindros):
 
 		SSTF_help(fila_espera, atual, atendidos, cilindros)
 		
-def menor_diferenca(fila_espera, cabeca, diff):
-	for f in fila_espera:
-		diff.append(abs(int(f) - int(cabeca))) 
-	return diff 
 
 
 # Algoritmo SCAN Sobe
 def SCAN_sobe(fila):
 	fila_espera = fila[:]
-	cilindros = 0
 	cabeca = fila_espera.pop(0)
 	atendidos = [int(cabeca)]
 
 	for i in range(len(fila_espera)):
 		fila_espera[i] = int(fila_espera[i])
 
-	SCAN_sobe_help(fila_espera, cabeca, atendidos, cilindros)
+	SCAN_sobe_help(fila_espera, cabeca, atendidos)
 
-def SCAN_sobe_help(fila_espera, cabeca, atendidos, cilindros):
+def SCAN_sobe_help(fila_espera, cabeca, atendidos):
 	diff = []
+	cilindros = 0
 	menores = []
 	maiores = []
 
@@ -78,17 +67,8 @@ def SCAN_sobe_help(fila_espera, cabeca, atendidos, cilindros):
 		elif f > int(cabeca):
 			maiores.append(f)
 	
-	while len(menores) > 0:
-		m = max(menores)
-		atendidos.append(m)
-		fila_espera.pop(fila_espera.index(m))
-		menores.pop(menores.index(m))
-
-	while len(maiores) > 0:
-		m = min(maiores)
-		atendidos.append(m)
-		fila_espera.pop(fila_espera.index(m))
-		maiores.pop(maiores.index(m))
+	percorrer_menores(menores, atendidos, fila_espera)
+	percorrer_maiores(maiores, atendidos, fila_espera)
 
 	for i in range(len(atendidos) - 1):
 		c = abs(atendidos[i + 1] - atendidos[i])
@@ -98,30 +78,22 @@ def SCAN_sobe_help(fila_espera, cabeca, atendidos, cilindros):
 		atendidos[i] = str(atendidos[i])
 
 	atendidos = ', '.join(atendidos)
-	print('SCAN sobe')
-	print('     Ordem: ', atendidos)
-	print('     Cilindros: ', cilindros, '\n')
-	
-	# print('menores', menores)
-	# print('maiores', maiores)
-	# print('atendidos', atendidos)
-	# print('fila', fila_espera)
-
+	imprimir('SCAN sobe', atendidos, cilindros)
 
 # Algoritmo SCAN Desce
 def SCAN_desce(fila):
 	fila_espera = fila[:]
-	cilindros = 0
 	cabeca = fila_espera.pop(0)
 	atendidos = [int(cabeca)]
 
 	for i in range(len(fila_espera)):
 		fila_espera[i] = int(fila_espera[i])
 
-	SCAN_desce_help(fila_espera, cabeca, atendidos, cilindros)
+	SCAN_desce_help(fila_espera, cabeca, atendidos)
 
-def SCAN_desce_help(fila_espera, cabeca, atendidos, cilindros):
+def SCAN_desce_help(fila_espera, cabeca, atendidos):
 	diff = []
+	cilindros = 0
 	menores = []
 	maiores = []
 
@@ -132,17 +104,8 @@ def SCAN_desce_help(fila_espera, cabeca, atendidos, cilindros):
 		elif f > int(cabeca):
 			maiores.append(f)
 	
-	while len(maiores) > 0:
-		m = min(maiores)
-		atendidos.append(m)
-		fila_espera.pop(fila_espera.index(m))
-		maiores.pop(maiores.index(m))
-
-	while len(menores) > 0:
-		m = max(menores)
-		atendidos.append(m)
-		fila_espera.pop(fila_espera.index(m))
-		menores.pop(menores.index(m))
+	percorrer_maiores(maiores, atendidos, fila_espera)
+	percorrer_menores(menores, atendidos, fila_espera)
 
 	for i in range(len(atendidos) - 1):
 		c = abs(atendidos[i + 1] - atendidos[i])
@@ -152,11 +115,35 @@ def SCAN_desce_help(fila_espera, cabeca, atendidos, cilindros):
 		atendidos[i] = str(atendidos[i])
 
 	atendidos = ', '.join(atendidos)
-	print('SCAN desce')
+	imprimir('SCAN desce', atendidos, cilindros)
+
+# Funções auxiliares
+def menor_diferenca(fila_espera, cabeca, diff):
+	for f in fila_espera:
+		diff.append(abs(int(f) - int(cabeca))) 
+	return diff 
+
+def percorrer_menores(menores, atendidos, fila_espera):
+	while len(menores) > 0:
+		m = max(menores)
+		atendidos.append(m)
+		fila_espera.pop(fila_espera.index(m))
+		menores.pop(menores.index(m))
+
+def percorrer_maiores(maiores, atendidos, fila_espera):
+	while len(maiores) > 0:
+		m = min(maiores)
+		atendidos.append(m)
+		fila_espera.pop(fila_espera.index(m))
+		maiores.pop(maiores.index(m))
+
+def imprimir(algoritmo, atendidos, cilindros):
+	print(algoritmo)
 	print('     Ordem: ', atendidos)
 	print('     Cilindros: ', cilindros, '\n')
 
 
+# Função principal
 def main():
 	try:
 		if len(sys.argv) < 2:
