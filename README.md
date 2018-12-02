@@ -1,4 +1,5 @@
-# Algoritmos de Escalonamento
+## Escalonamento de gerenciamento de disco
+**Discente:** Jessiely Oliveira Costa
 
 Implementação de algoritmos de gerenciamento de disco para a disciplina de Sistemas Operacionais.
 
@@ -7,6 +8,7 @@ Implementação de algoritmos de gerenciamento de disco para a disciplina de Sis
 * SCAN Sobe
 * SCAN Desce
 
-Para rodar o código
-* python3 main.py [arquivo de configuração]
-
+Para executar o código
+~~~
+python3 main.py config.txt
+~~~
